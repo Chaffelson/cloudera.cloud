@@ -436,11 +436,12 @@ class EnvironmentInfo(CdpModule):
             for this_env in self.environments:
                 df = None
                 # Removing until DF is GA so we are not dependent on Beta functionality
-                # df = self.cdpy.df.describe_environment(this_env['crn'])
+                df = self.cdpy.df.list_services(env_crn=this_env['crn'])
                 this_env['descendants'] = {
                     'datahub': self.cdpy.datahub.describe_all_clusters(this_env['environmentName']),
                     'dw': self.cdpy.dw.gather_clusters(this_env['crn']),
                     'ml': self.cdpy.ml.describe_all_workspaces(this_env['environmentName']),
+                    'de': self.cdpy.de.list_services(this_env['environmentName'], remove_deleted=True),
                     'opdb': self.cdpy.opdb.describe_all_databases(this_env['environmentName']),
                     'df': df if df is not None else []
                 }
